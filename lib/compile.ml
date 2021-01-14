@@ -47,7 +47,7 @@ let compile_fragment ~inputs_by_digest info =
 let compile_package_page pkg inputs package_page =
   let open Makefile in
   let index_compiled = Inputs.index_page_odoc pkg in
-  let childs = List.map Inputs.child_name inputs in
+  let childs = List.map (fun inp -> inp.Inputs.name) inputs in
   let childs_args = List.flatten @@ List.map (fun c -> [ "-c"; c ]) childs in
   let index_mld, index_mld_rule =
     match package_page with

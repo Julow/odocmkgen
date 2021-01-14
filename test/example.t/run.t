@@ -11,8 +11,8 @@ The driver works on compiled files:
   Warning, couldn't find dep CamlinternalFormatBasics of file b/b.cmi
   Warning, couldn't find dep Stdlib of file b/b.cmi
   'mkdir' '-p' 'odocs/b'
-  'odocmkgen' 'package-index' 'b' 'b' >'odocs/b/b.mld'
-  'odoc' 'compile' '-c' 'b' 'odocs/b/b.mld' '-o' 'odocs/b/page-b.odoc'
+  'odocmkgen' 'package-index' 'b' 'B' >'odocs/b/b.mld'
+  'odoc' 'compile' '-c' 'B' 'odocs/b/b.mld' '-o' 'odocs/b/page-b.odoc'
   'odoc' 'compile' '--parent' 'page-b' 'b/b.cmi' '-I' 'odocs/b/' '-o' 'odocs/b/b.odoc'
   'odoc' 'link' 'odocs/b/page-b.odoc' '-o' 'odocls/b/page-b.odocl' '-I' 'odocs/b/'
   'odoc' 'link' 'odocs/b/b.odoc' '-o' 'odocls/b/b.odocl' '-I' 'odocs/b/'
@@ -20,8 +20,8 @@ The driver works on compiled files:
   dir=b file=
   dir=b file=B
   'mkdir' '-p' 'odocs/a'
-  'odocmkgen' 'package-index' 'a' 'a' >'odocs/a/a.mld'
-  'odoc' 'compile' '-c' 'a' 'odocs/a/a.mld' '-o' 'odocs/a/page-a.odoc'
+  'odocmkgen' 'package-index' 'a' 'A' >'odocs/a/a.mld'
+  'odoc' 'compile' '-c' 'A' 'odocs/a/a.mld' '-o' 'odocs/a/page-a.odoc'
   'odoc' 'compile' '--parent' 'page-a' 'a/a.cmi' '-I' 'odocs/a/' '-o' 'odocs/a/a.odoc'
   'odoc' 'link' 'odocs/a/page-a.odoc' '-o' 'odocls/a/page-a.odocl' '-I' 'odocs/a/'
   'odoc' 'link' 'odocs/a/a.odoc' '-o' 'odocls/a/a.odocl' '-I' 'odocs/a/'

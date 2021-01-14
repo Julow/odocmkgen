@@ -37,7 +37,7 @@ Use paths found by findlib:
   odocmkgen gen $TESTCASE_ROOT/_build/install/default/lib/test
   Warning, couldn't find dep CamlinternalFormatBasics of file $TESTCASE_ROOT/_build/install/default/lib/test/test.cmti
   Warning, couldn't find dep Stdlib of file $TESTCASE_ROOT/_build/install/default/lib/test/test.cmti
-  'odoc' 'compile' '-c' 'test' '$TESTCASE_ROOT/_build/install/default/doc/test/odoc-pages/test.mld' '-o' 'odocs/test/page-test.odoc'
+  'odoc' 'compile' '-c' 'Test' '$TESTCASE_ROOT/_build/install/default/doc/test/odoc-pages/test.mld' '-o' 'odocs/test/page-test.odoc'
   'odoc' 'compile' '--parent' 'page-test' '$TESTCASE_ROOT/_build/install/default/lib/test/test.cmti' '-I' 'odocs/test/' '-o' 'odocs/test/test.odoc'
   'odoc' 'link' 'odocs/test/page-test.odoc' '-o' 'odocls/test/page-test.odocl' '-I' 'odocs/test/' '-I' 'odocs/test/odoc-pages/'
   'odoc' 'link' 'odocs/test/test.odoc' '-o' 'odocls/test/test.odocl' '-I' 'odocs/test/' '-I' 'odocs/test/odoc-pages/'
