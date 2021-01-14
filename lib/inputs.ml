@@ -52,18 +52,6 @@ let get_cm_files files =
 (** Get mld files out of a list of files. *)
 let get_mld_files = List.filter (Fpath.has_ext ".mld")
 
-(** Name of the index page of a package, for [--parent]. *)
-let index_page_name pkg = "page-" ^ pkg
-
-(** Name of the index page when generated. *)
-let index_page_mld pkg = Fpath.(v "odocs" / pkg / (pkg ^ ".mld"))
-
-let index_page_odoc pkg =
-  Fpath.(v "odocs" / pkg / (index_page_name pkg ^ ".odoc"))
-
-let index_page_odocl pkg =
-  Fpath.(v "odocls" / pkg / (index_page_name pkg ^ ".odocl"))
-
 (** Represents the necessary information about a particular compilation unit *)
 type t = {
   name : string;  (** 'Astring' *)
@@ -76,6 +64,8 @@ type t = {
   digest : Digest.t;  (** Digest of the compilation unit itself *)
   package : string;  (** Package in which this file lives ("astring") *)
   deps : Odoc.compile_dep list;  (** dependencies of this file *)
+  parent : string option;  (** Parent unit. *)
+  childs : string list;  (** Child units. *)
 }
 
 let pp fmt x =
@@ -102,10 +92,24 @@ let get_cm_info ~package root inppath =
   in
   let fname = Fpath.base reloutpath in
   let name = String.capitalize_ascii Fpath.(to_string (rem_ext fname)) in
+  let parent = Some ("page-" ^ package) in
+  let childs = [] in
   match List.partition (fun d -> d.Odoc.c_unit_name = name) deps with
   | [ self ], deps ->
       let digest = self.c_digest in
-      [ { name; inppath; root; reloutpath; digest; package; deps } ]
+      [
+        {
+          name;
+          inppath;
+          root;
+          reloutpath;
+          digest;
+          package;
+          deps;
+          parent;
+          childs;
+        };
+      ]
   | _ ->
       Format.eprintf "Failed to find digest for self (%s)\n%!" name;
       []
@@ -116,12 +120,32 @@ let get_mld_info ~package root inppath =
     | Some p -> p
     | None -> failwith "odd"
   in
+  let relpath =
+    relpath
+    (* match Fpath.rem_prefix (Fpath.v "odoc-pages/") relpath with *)
+    (* | Some p -> Fpath.normalize p *)
+    (* | None -> relpath *)
+  in
   let fparent, fname = Fpath.split_base relpath in
   (* Prefix name and output file name with "page-" *)
   let outfname = Fpath.v ("page-" ^ Fpath.to_string fname) in
   let name = Fpath.to_string (Fpath.rem_ext outfname) in
   let reloutpath = Fpath.append fparent outfname in
-  [ { name; inppath; root; reloutpath; digest = ""; deps = []; package } ]
+  let parent = Some ("page-" ^ package) in
+  let childs = [] in
+  [
+    {
+      name;
+      inppath;
+      root;
+      reloutpath;
+      digest = "";
+      deps = [];
+      package;
+      parent;
+      childs;
+    };
+  ]
 
 (** Expect paths like [prefix/lib/package] or [prefix/lib/package/sub_dir].
     These paths are used in Opam and in Dune's _build/install.

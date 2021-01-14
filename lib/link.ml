@@ -61,15 +61,6 @@ let gen_input ~packages ~package_deps inp =
   and output_file = Inputs.link_target inp in
   gen_link ~packages ~package_deps input_file output_file
 
-let package_page ~packages ~package_deps package =
-  let index_odoc = Inputs.index_page_odoc package
-  and index_odocl = Inputs.index_page_odocl package in
-  gen_link ~packages ~package_deps index_odoc index_odocl
-
-let remove_package_page pkg inputs =
-  let page_name = "page-" ^ pkg in
-  List.filter (fun inp -> inp.Inputs.name <> page_name) inputs
-
 (* Ideally we would have a list of packages on which the specified package depends.
    Here we're making an assumption - that the references in the doc comments will
    only be referring to packages that are required to compile the modules. Other
@@ -88,14 +79,11 @@ let gen packages =
   StringMap.fold
     (fun package inputs acc ->
       (* Don't link hidden modules *)
-      let inputs = remove_package_page package inputs in
       let inputs =
         inputs >>= filter (fun inp -> not (is_hidden inp.Inputs.name))
       in
       let package_deps = package :: StringMap.find package package_deps in
-      let output_files =
-        Inputs.index_page_odocl package :: List.map Inputs.link_target inputs
-      in
+      let output_files = List.map Inputs.link_target inputs in
       let pkg_makefile =
         Fpath.v (Format.asprintf "Makefile.%s.generate" package)
       in
@@ -104,7 +92,6 @@ let gen packages =
         [
           acc;
           concat (List.map (gen_input ~packages ~package_deps) inputs);
-          package_page ~packages ~package_deps package;
           rule pkg_makefile ~fdeps:output_files
             [ cmd "odocmkgen" $ "generate" $ "--package" $ package ];
           include_ pkg_makefile;

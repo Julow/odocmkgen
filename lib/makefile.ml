@@ -11,6 +11,8 @@ type t = Rule of rule | Concat of t list | Include of string
 
 let cmd_to_string cmd = cmd []
 
+let empty = Concat []
+
 let concat ts = Concat ts
 
 let rule' target ?(fdeps = []) ?(deps = []) ?(oo_deps = []) recipe =

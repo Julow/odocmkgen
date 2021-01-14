@@ -5,6 +5,8 @@ type t
 
 type cmd
 
+val empty : t
+
 val concat : t list -> t
 
 val rule :
