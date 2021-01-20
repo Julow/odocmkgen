@@ -1,1 +1,3 @@
-val hello : string
+type t
+
+val of_string : string -> t

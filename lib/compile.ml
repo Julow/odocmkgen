@@ -1,5 +1,3 @@
-open Util
-
 (* Rules for compiling cm{t,ti,i} files into odoc files *)
 let compile_fragment (info, deps) =
   (* Get the filename of the output odoc file *)
@@ -21,13 +19,13 @@ let compile_fragment (info, deps) =
           cmd "odoc" $ "compile" $ "--package" $ info.package $ "$<"
           $$ include_args $ "-o" $ "$@";
         ];
-      phony_rule ("compile-" ^ info.package) ~fdeps:[ odoc_path ] [];
+      phony_rule (Inputs.compile_rule info) ~fdeps:[ odoc_path ] [];
     ]
 
 let gen inputs =
-  let packages = Inputs.split_packages inputs in
   let package_rules_s =
-    List.map (fun (pkg, _) -> "compile-" ^ pkg) (StringMap.bindings packages)
+    List.map (fun (info, _) -> Inputs.compile_rule info) inputs
+    |> List.sort_uniq String.compare
   in
   let open Makefile in
   concat

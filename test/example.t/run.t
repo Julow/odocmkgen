@@ -10,11 +10,11 @@ The driver works on compiled files:
 
   $ make
   'mkdir' 'odocs'
-  'odoc' 'compile' '--package' 'a' 'a/a.cmi' '-o' 'odocs/a/a.odoc'
   'odoc' 'compile' '--package' 'b' 'b/b.cmi' '-o' 'odocs/b/b.odoc'
+  'odoc' 'compile' '--package' 'a' 'a/a.cmi' '-I' 'odocs/b/' '-o' 'odocs/a/a.odoc'
   'mkdir' 'odocls'
-  'odoc' 'link' 'odocs/a/a.odoc' '-o' 'odocls/a/a.odocl' '-I' 'odocs/a/'
   'odoc' 'link' 'odocs/b/b.odoc' '-o' 'odocls/b/b.odocl' '-I' 'odocs/b/'
+  'odoc' 'link' 'odocs/a/a.odoc' '-o' 'odocls/a/a.odocl' '-I' 'odocs/a/' '-I' 'odocs/b/'
 
   $ odocmkgen generate odocls/* > Makefile.generate
   dir=a file=A

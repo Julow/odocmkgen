@@ -54,13 +54,18 @@ let pp fmt x =
 
 let input_file t = t.inppath
 
+let compile_path_of_relpath = Fpath.(( // ) (v "odocs"))
+
+let link_path_of_relpath = Fpath.(( // ) (v "odocls"))
+
 (** Returns the relative path to an odoc file based on an input file. For example, given
    `/home/opam/.opam/4.10.0/lib/ocaml/compiler-libs/lambda.cmi` it will return
    `odocs/ocaml/compiler-libs/lambda.odoc` *)
-let compile_target t = Fpath.(v "odocs" // set_ext "odoc" t.reloutpath)
+let compile_target t =
+  compile_path_of_relpath (Fpath.set_ext "odoc" t.reloutpath)
 
 (** Like [compile_target] but goes into the "odocls" directory. *)
-let link_target t = Fpath.(v "odocls" // set_ext "odocl" t.reloutpath)
+let link_target t = link_path_of_relpath (Fpath.set_ext "odocl" t.reloutpath)
 
 (* Get info given a base file (cmt, cmti or cmi) *)
 let get_cm_info root inppath =
@@ -107,6 +112,14 @@ let split_packages inputs =
     (fun acc (({ package; _ }, _) as inp) ->
       StringMap.update package (f inp) acc)
     StringMap.empty inputs
+
+(** The name of phony rules for compiling every units in a directory. Works
+    with [reloutpath]. These rules are defined by [Compile] and used by [Link]. *)
+let compile_rule_of_path path =
+  String.concat "-" ("compile" :: List.filter (( <> ) "") (Fpath.segs path))
+
+let compile_rule inp =
+  compile_rule_of_path (Fpath.parent inp.reloutpath)
 
 module DigestMap = Map.Make (Digest)
 

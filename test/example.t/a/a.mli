@@ -1,2 +1,1 @@
-(** On top of {!B.hello} *)
-val hello_world : string
+val hello_world : B.t
