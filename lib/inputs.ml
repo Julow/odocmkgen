@@ -93,8 +93,7 @@ let get_mld_info root inppath =
 let compile_rule_of_path path =
   String.concat "-" ("compile" :: List.filter (( <> ) "") (Fpath.segs path))
 
-let compile_rule inp =
-  compile_rule_of_path (Fpath.parent inp.reloutpath)
+let compile_rule inp = compile_rule_of_path (Fpath.parent inp.reloutpath)
 
 module DigestMap = Map.Make (Digest)
 
@@ -135,4 +134,4 @@ let compile_deps inputs =
 let find_inputs root =
   let files = Fs_util.dir_contents_rec root in
   compile_deps (get_cm_files files |> List.map (get_cm_info root))
-  @ (get_mld_files files >>= fun mld -> [ get_mld_info root mld, [] ])
+  @ (get_mld_files files >>= fun mld -> [ (get_mld_info root mld, []) ])
